@@ -24,22 +24,24 @@
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.4);
             z-index: 1;
         }
+        
+        /* THE GLASS CONTAINER */
         .container {
             position: relative;
             z-index: 2;
             text-align: center;
-            background: rgba(26, 26, 26, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             padding: 2.5rem;
             border-radius: 24px;
-            box-shadow: 0 20px 45px rgba(0,0,0,0.6);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.5);
             width: 340px;
             box-sizing: border-box;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
         h2 {
             margin-top: 0;
@@ -63,8 +65,13 @@
             gap: 15px;
             margin: 1.5rem 0;
         }
+        
+        /* THE GLASS COUNTER BOXES */
         .counter-box {
-            background: rgba(35, 35, 35, 0.75);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
             padding: 14px;
             border-radius: 14px;
             border-bottom: 3px solid #8ec5fc;
@@ -73,8 +80,13 @@
             grid-column: span 2;
             border-bottom-color: #ff2e63;
         }
+        
+        /* THE GLASS SINGLE DISPLAY BOX */
         .single-display-box {
-            background: rgba(35, 35, 35, 0.75);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
             padding: 24px 14px;
             border-radius: 14px;
             border-bottom: 3px solid #8ec5fc;
@@ -85,19 +97,21 @@
             font-weight: 800;
             color: #ffffff;
             line-height: 1.1;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
         }
         .time-label {
             font-size: 0.75rem;
-            color: #bbb;
+            color: #ddd;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             margin-top: 6px;
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
         }
         .view-hint {
             font-size: 0.8rem;
             color: #8ec5fc;
             margin-top: 10px;
-            opacity: 0.8;
+            opacity: 0.9;
             letter-spacing: 0.5px;
         }
         .menu-icon {
@@ -121,6 +135,8 @@
         .menu-icon:hover {
             background: rgba(0, 0, 0, 0.6);
         }
+        
+        /* DRAWER & SIDEBAR STYLES */
         .drawer {
             position: fixed;
             top: 0; right: -300px;
@@ -133,8 +149,12 @@
             box-sizing: border-box;
             text-align: left;
             border-left: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         .drawer.open { right: 0; }
+        .drawer-content { flex-grow: 1; }
         .drawer h3 { margin-top: 0; color: white; border-bottom: 1px solid #2a2a2a; padding-bottom: 12px; font-weight: 600;}
         .drawer-close { font-size: 1.4rem; cursor: pointer; float: right; color: #666; transition: color 0.2s; }
         .drawer-close:hover { color: #fff; }
@@ -159,6 +179,43 @@
         .btn-danger { background-color: #1a1a1a; color: #ff2e63; border: 1px solid #ff2e63; margin-top: 25px;}
         .btn-danger:hover { background-color: #ff2e63; color: white; }
         .hidden { display: none !important; }
+
+        /* PEERCOACH CREDIT & DONATE LINK */
+        .donation-box {
+            border-top: 1px solid #2a2a2a;
+            padding-top: 20px;
+            margin-top: auto;
+            text-align: center;
+        }
+        .donation-box p {
+            margin: 0 0 10px 0;
+            font-size: 0.8rem;
+            color: #888;
+            letter-spacing: 0.5px;
+        }
+        .btn-donate {
+            display: block;
+            background: linear-gradient(135deg, #2c2c2c, #1a1a1a);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            text-decoration: none;
+            text-align: center;
+            padding: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .btn-donate:hover {
+            background: linear-gradient(135deg, #3c3c3c, #2a2a2a);
+            border-color: #8ec5fc;
+            box-shadow: 0 4px 20px rgba(142, 197, 252, 0.15);
+        }
+        .btn-donate span {
+            color: #ff2e63;
+            margin-left: 4px;
+        }
     </style>
 </head>
 <body>
@@ -166,26 +223,36 @@
 <div class="menu-icon" id="menuBtn" onclick="toggleDrawer(true)">☰</div>
 
 <div class="drawer" id="sideDrawer">
-    <span class="drawer-close" onclick="toggleDrawer(false)">✕</span>
-    <h3>Settings</h3>
-    
-    <div class="input-group">
-        <label>Select Theme Background</label>
-        <select id="bgSelect" onchange="changeBackground(this.value)">
-            <option value="dark">Minimalist Dark</option>
-            <option value="sunset">Calming Ocean Sunset (HD)</option>
-            <option value="forest">Foggy Pine Forest (HD)</option>
-            <option value="flowers">Spring Pink Flowers (HD)</option>
-            <option value="mountains">Misty Mountains (HD)</option>
-            <option value="stars">Deep Night Sky (HD)</option>
-        </select>
-        <div style="margin-top: 16px; background: #202020; padding: 12px; border-radius: 8px; border: 1px dashed #333;">
-            <label style="font-size: 0.7rem; margin-bottom: 6px;">Use Custom Local Photo</label>
-            <input type="file" id="customBgInput" accept="image/*" style="font-size: 0.8rem; color: #888; width: 100%;">
+    <div class="drawer-content">
+        <span class="drawer-close" onclick="toggleDrawer(false)">✕</span>
+        <h3>Settings</h3>
+        
+        <div class="input-group">
+            <label>Select Theme Background</label>
+            <select id="bgSelect" onchange="changeBackground(this.value)">
+                <option value="dark">Minimalist Dark</option>
+                <option value="sunset">Calming Ocean Sunset (HD)</option>
+                <option value="forest">Foggy Pine Forest (HD)</option>
+                <option value="flowers">Spring Pink Flowers (HD)</option>
+                <option value="mountains">Misty Mountains (HD)</option>
+                <option value="stars">Deep Night Sky (HD)</option>
+            </select>
+            <div style="margin-top: 16px; background: #202020; padding: 12px; border-radius: 8px; border: 1px dashed #333;">
+                <label style="font-size: 0.7rem; margin-bottom: 6px;">Use Custom Local Photo</label>
+                <input type="file" id="customBgInput" accept="image/*" style="font-size: 0.8rem; color: #888; width: 100%;">
+            </div>
         </div>
+
+        <button class="btn-danger" id="resetBtn">RESET SYSTEM DATE</button>
     </div>
 
-    <button class="btn-danger" id="resetBtn">RESET SYSTEM DATE</button>
+    <!-- UPDATED PEERCOACH CREDIT & DONATE SECTION -->
+    <div class="donation-box">
+        <p>Created by PeerCoach.org</p>
+        <a href="https://peercoach.org/app-donate.html" class="btn-donate" target="_blank">
+            Support Our Mission <span>❤️</span>
+        </a>
+    </div>
 </div>
 
 <div class="container">
@@ -240,7 +307,6 @@
     let currentMode = parseInt(localStorage.getItem('displayMode') || '0'); 
     let intervalId = null;
 
-    // Upgraded Premium Image Links
     const themes = {
         dark: '#121212',
         sunset: 'url("https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcTa_nai7Mi3ozhlnqnrp9NS-19iPXmLstB0kUZHFX-5OnKDBaYlmR9l1DXbIH15O3PLdofWNssQpKCnejU")',
@@ -294,6 +360,7 @@
         }
     }
 
+    // Drawer state controls
     function toggleDrawer(open) {
         if (open) sideDrawer.classList.add('open');
         else sideDrawer.classList.remove('open');
